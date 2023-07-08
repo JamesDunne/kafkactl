@@ -349,7 +349,7 @@ func printResourceAcls(outputFormat string, aclList ...ResourceACLEntry) error {
 		if err := tableWriter.WriteHeader("RESOURCE_TYPE", "RESOURCE_NAME", "PATTERN_TYPE", "PRINCIPAL", "HOST", "OPERATION", "PERMISSION_TYPE"); err != nil {
 			return err
 		}
-	} else if outputFormat == "json" || outputFormat == "yaml" {
+	} else if output.IsObjectFormat(outputFormat) {
 		if err := output.PrintObject(aclList, outputFormat); err != nil {
 			return err
 		}

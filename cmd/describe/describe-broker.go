@@ -33,7 +33,7 @@ func newDescribeBrokerCmd() *cobra.Command {
 		ValidArgsFunction: broker.CompleteBrokerIds,
 	}
 
-	cmdDescribeBroker.Flags().StringVarP(&flags.OutputFormat, "output", "o", flags.OutputFormat, "output format. One of: json|yaml|wide")
+	cmdDescribeBroker.Flags().StringVarP(&flags.OutputFormat, "output", "o", flags.OutputFormat, "output format. One of: json|jsonl|yaml|wide")
 
 	return cmdDescribeBroker
 }

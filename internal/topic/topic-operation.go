@@ -174,7 +174,7 @@ func (operation *Operation) printTopic(topic Topic, flags DescribeTopicFlags) er
 		topic.Configs = nil
 	}
 
-	if len(topic.Configs) != 0 && flags.OutputFormat != "json" && flags.OutputFormat != "yaml" {
+	if len(topic.Configs) != 0 && !output.IsObjectFormat(flags.OutputFormat) {
 		configTableWriter := output.CreateTableWriter()
 		if err := configTableWriter.WriteHeader("CONFIG", "VALUE"); err != nil {
 			return err
@@ -209,11 +209,11 @@ func (operation *Operation) printTopic(topic Topic, flags DescribeTopicFlags) er
 			"LEADER", "REPLICAS", "IN_SYNC_REPLICAS"); err != nil {
 			return err
 		}
-	} else if flags.OutputFormat != "json" && flags.OutputFormat != "yaml" {
+	} else if !output.IsObjectFormat(flags.OutputFormat) {
 		return errors.Errorf("unknown outputFormat: %s", flags.OutputFormat)
 	}
 
-	if flags.OutputFormat == "json" || flags.OutputFormat == "yaml" {
+	if output.IsObjectFormat(flags.OutputFormat) {
 		return output.PrintObject(topic, flags.OutputFormat)
 	} else if flags.OutputFormat == "wide" || flags.OutputFormat == "" {
 		for _, p := range topic.Partitions {
@@ -585,7 +585,7 @@ func (operation *Operation) GetTopics(flags GetTopicsFlags) error {
 		if err := tableWriter.WriteHeader("TOPIC", "PARTITIONS", "REPLICATION FACTOR", "CONFIGS"); err != nil {
 			return err
 		}
-	} else if flags.OutputFormat == "json" {
+	} else if output.IsJson(flags.OutputFormat) {
 		requestedFields = allFields
 	} else if flags.OutputFormat == "yaml" {
 		requestedFields = allFields
@@ -622,7 +622,7 @@ func (operation *Operation) GetTopics(flags GetTopicsFlags) error {
 		return topicList[i].Name < topicList[j].Name
 	})
 
-	if flags.OutputFormat == "json" || flags.OutputFormat == "yaml" {
+	if output.IsObjectFormat(flags.OutputFormat) {
 		return output.PrintObject(topicList, flags.OutputFormat)
 	} else if flags.OutputFormat == "wide" {
 		for _, t := range topicList {

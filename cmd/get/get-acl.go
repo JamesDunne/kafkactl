@@ -37,7 +37,7 @@ func newGetACLCmd() *cobra.Command {
 	cmdGetAcls.Flags().BoolVarP(&flags.Groups, "groups", "g", false, "list acl for consumer groups")
 	cmdGetAcls.Flags().BoolVarP(&flags.Cluster, "cluster", "c", false, "list acl for the cluster")
 
-	cmdGetAcls.Flags().StringVarP(&flags.OutputFormat, "output", "o", flags.OutputFormat, "output format. One of: json|yaml")
+	cmdGetAcls.Flags().StringVarP(&flags.OutputFormat, "output", "o", flags.OutputFormat, "output format. One of: json|jsonl|yaml")
 
 	_ = cmdGetAcls.RegisterFlagCompletionFunc("operation", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return []string{"any", "all", "read", "write", "create", "delete", "alter", "describe", "clusteraction", "describeconfigs", "alterconfigs", "idempotentwrite"}, cobra.ShellCompDirectiveDefault

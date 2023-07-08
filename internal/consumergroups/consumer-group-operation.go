@@ -196,11 +196,11 @@ func (operation *ConsumerGroupOperation) DescribeConsumerGroup(flags DescribeCon
 			if err := tableWriter.WriteHeader("PARTITION", "OLDEST_OFFSET", "NEWEST_OFFSET", "LEADER", "REPLICAS", "IN_SYNC_REPLICAS"); err != nil {
 				return err
 			}
-		} else if flags.OutputFormat != "json" && flags.OutputFormat != "yaml" {
+		} else if !output.IsObjectFormat(flags.OutputFormat) {
 			return errors.Errorf("unknown outputFormat: %s", flags.OutputFormat)
 		}
 
-		if flags.OutputFormat == "json" || flags.OutputFormat == "yaml" {
+		if output.IsObjectFormat(flags.OutputFormat) {
 			if err := output.PrintObject(consumerGroupDescription, flags.OutputFormat); err != nil {
 				return err
 			}
@@ -385,12 +385,12 @@ func (operation *ConsumerGroupOperation) GetConsumerGroups(flags GetConsumerGrou
 		if err := tableWriter.WriteHeader("CONSUMER_GROUP", "PROTOCOL_TYPE", "TOPICS"); err != nil {
 			return err
 		}
-	} else if flags.OutputFormat != "json" && flags.OutputFormat != "yaml" {
+	} else if !output.IsObjectFormat(flags.OutputFormat) {
 		return errors.Errorf("unknown output format: %s", flags.OutputFormat)
 	}
 
 	for _, cg := range consumerGroups {
-		if flags.OutputFormat == "json" || flags.OutputFormat == "yaml" {
+		if output.IsObjectFormat(flags.OutputFormat) {
 			if err := output.PrintObject(cg, flags.OutputFormat); err != nil {
 				return err
 			}

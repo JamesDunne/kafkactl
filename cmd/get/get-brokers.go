@@ -23,7 +23,7 @@ func newGetBrokersCmd() *cobra.Command {
 		},
 	}
 
-	cmdGetBrokers.Flags().StringVarP(&flags.OutputFormat, "output", "o", flags.OutputFormat, "output format. One of: json|yaml|compact")
+	cmdGetBrokers.Flags().StringVarP(&flags.OutputFormat, "output", "o", flags.OutputFormat, "output format. One of: json|jsonl|yaml|compact")
 
 	return cmdGetBrokers
 }

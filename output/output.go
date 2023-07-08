@@ -46,6 +46,14 @@ func TestLogf(msg string, args ...interface{}) {
 	TestLogger.Printf(msg+"\n", args...)
 }
 
+func IsObjectFormat(format string) bool {
+	return format == "json" || format == "jsonl" || format == "yaml"
+}
+
+func IsJson(format string) bool {
+	return format == "json" || format == "jsonl"
+}
+
 func PrintObject(object interface{}, format string) error {
 	if format == "yaml" {
 		yamlString, err := yaml.Marshal(object)
@@ -55,6 +63,12 @@ func PrintObject(object interface{}, format string) error {
 		_, _ = fmt.Fprintln(IoStreams.Out, string(yamlString))
 	} else if format == "json" {
 		jsonString, err := json.MarshalIndent(object, "", "\t")
+		if err != nil {
+			return errors.Wrap(err, "unable to format json")
+		}
+		_, _ = fmt.Fprintln(IoStreams.Out, string(jsonString))
+	} else if format == "jsonl" {
+		jsonString, err := json.Marshal(object)
 		if err != nil {
 			return errors.Wrap(err, "unable to format json")
 		}

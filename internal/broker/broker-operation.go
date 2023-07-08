@@ -63,7 +63,7 @@ func (operation *Operation) GetBrokers(flags GetBrokersFlags) error {
 		}
 	} else if flags.OutputFormat == "compact" {
 		tableWriter.Initialize()
-	} else if flags.OutputFormat != "json" && flags.OutputFormat != "yaml" {
+	} else if !output.IsObjectFormat(flags.OutputFormat) {
 		return errors.Errorf("unknown outputFormat: %s", flags.OutputFormat)
 	}
 
@@ -88,7 +88,7 @@ func (operation *Operation) GetBrokers(flags GetBrokersFlags) error {
 		return brokerList[i].ID < brokerList[j].ID
 	})
 
-	if flags.OutputFormat == "json" || flags.OutputFormat == "yaml" {
+	if output.IsObjectFormat(flags.OutputFormat) {
 		return output.PrintObject(brokerList, flags.OutputFormat)
 	} else if flags.OutputFormat == "compact" {
 		for _, t := range brokerList {
@@ -159,7 +159,7 @@ func (operation *Operation) DescribeBroker(id int32, flags DescribeBrokerFlags) 
 
 	brokerInfo := Broker{ID: broker.ID(), Address: broker.Addr(), Configs: configs}
 
-	if flags.OutputFormat == "json" || flags.OutputFormat == "yaml" {
+	if output.IsObjectFormat(flags.OutputFormat) {
 		return output.PrintObject(brokerInfo, flags.OutputFormat)
 	} else if flags.OutputFormat != "" && flags.OutputFormat != "wide" {
 		return errors.Errorf("unknown outputFormat: %s", flags.OutputFormat)
